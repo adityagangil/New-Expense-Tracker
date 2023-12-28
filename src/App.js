@@ -1,21 +1,28 @@
-import React from 'react';
-import Signup from './components/Signup';
-import { initializeApp } from 'firebase/app';
-import 'firebase/auth';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import AuthForm from './components/AuthForm';
+import Home from './components/home';
+import { AuthContext, AuthContextProvider } from './components/auth-context';
 
-// Replace with your Firebase API key
-const firebaseConfig = {
-  apiKey: "AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I"
+const ProtectedRoute = ({ element }) => {
+  const authCtx = useContext(AuthContext);
+
+  return authCtx.isLoggedIn ? element : <Navigate to="/login" />;
 };
-
-// Initialize Firebase
-initializeApp(firebaseConfig);
 
 const App = () => {
   return (
-    <div className="app-container">
-      <Signup />
-    </div>
+    <AuthContextProvider>
+      <Router>
+        <Container className="mt-4 text-center">
+          <Routes>
+            <Route path="/" element={<AuthForm />} />
+            <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+          </Routes>
+        </Container>
+      </Router>
+    </AuthContextProvider>
   );
 };
 

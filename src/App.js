@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { Container } from 'react-bootstrap';
 import AuthForm from './components/AuthForm';
 import Home from './components/home';
+import CompleteProfile from './components/CompleteProfile';
 import { AuthContext, AuthContextProvider } from './components/auth-context';
 
 const ProtectedRoute = ({ element }) => {
@@ -19,6 +20,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<AuthForm />} />
             <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+            <Route path="/complete-profile" element={<ProtectedRoute element={<CompleteProfile />} />} />
           </Routes>
         </Container>
       </Router>

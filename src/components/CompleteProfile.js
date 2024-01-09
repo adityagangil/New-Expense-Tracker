@@ -1,6 +1,7 @@
 // Inside your CompleteProfile.js component
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './auth-context';
+import { useNavigate } from 'react-router-dom'; 
 import './CompleteProfile.css';
 
 const CompleteProfile = () => {
@@ -9,6 +10,7 @@ const CompleteProfile = () => {
     displayName: '',
     photoURL: '',
   });
+  const navigate = useNavigate(); 
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   useEffect(() => {
@@ -79,6 +81,7 @@ const CompleteProfile = () => {
         if (!data.emailVerified) {
           initiateEmailVerification();
         }
+        navigate('/'); 
       })
       .catch((error) => {
         console.error('Error updating user details:', error);
@@ -115,6 +118,9 @@ const CompleteProfile = () => {
 
   return (
     <div className="text-center">
+      {/* Logout Button */}
+      <button onClick={authCtx.logout}>Logout</button>
+
       <h1>Complete Your Profile</h1>
       <form>
         <div>

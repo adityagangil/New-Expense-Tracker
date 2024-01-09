@@ -6,12 +6,14 @@ const Home = () => {
   const authCtx = useContext(AuthContext);
 
   return (
-    <div className="text-center">
+    <div style={{ textAlign: 'center' }}>
       <h1>Welcome to Expense Tracker</h1>
       {authCtx.isLoggedIn && !authCtx.isProfileComplete && (
         <div>
           <p>Your profile is incomplete. Please complete it.</p>
-          <Link to="/complete-profile">Complete Profile</Link>
+          <Link to="/complete-profile" style={{ textDecoration: 'none', color: 'blue' }}>
+            Complete Profile
+          </Link>
         </div>
       )}
     </div>

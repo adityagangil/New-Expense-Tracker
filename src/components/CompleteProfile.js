@@ -1,16 +1,46 @@
 // CompleteProfile.js
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './auth-context';
-// import { updateFirebaseUserProfile } from './firebase-utils';
 import './CompleteProfile.css';
 
 const CompleteProfile = () => {
   const authCtx = useContext(AuthContext);
   const [profileData, setProfileData] = useState({
-    // Initialize with existing user data if available
-    displayName: authCtx.displayName || '',
-    photoURL: authCtx.photoURL || '',
+    displayName: '',
+    photoURL: '',
   });
+
+  useEffect(() => {
+    // Fetch user profile data from Firebase API upon component mount
+    const apiUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I`;
+
+    const requestBody = {
+      idToken: authCtx.token,
+    };
+
+    fetch(apiUrl, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Handle the response from the Firebase API
+        if (data.users && data.users.length > 0) {
+          const user = data.users[0];
+          setProfileData({
+            displayName: user.displayName || '',
+            photoURL: user.photoURL || '',
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching user details:', error);
+        // Handle error, show message, etc.
+      });
+  }, [authCtx.token]);
 
   const handleUpdateProfile = () => {
     // Call the Firebase API to update user details

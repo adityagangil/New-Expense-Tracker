@@ -4,20 +4,24 @@ import React, { useState, useEffect, useCallback } from 'react';
 export const AuthContext = React.createContext({
   token: '',
   isLoggedIn: false,
-  login: (token) => { },
-  logout: () => { },
+  login: (token) => {},
+  logout: () => {},
+  updateProfile: (newProfile) => {},
 });
 
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem('token');
   const [token, setToken] = useState(initialToken);
   const [logoutTimer, setLogoutTimer] = useState(null);
+  const [displayName, setDisplayName] = useState('');
+  const [photoURL, setPhotoURL] = useState('');
 
   const userIsLoggedIn = !!token;
 
-  // Wrap the definition of logoutHandler in useCallback
   const logoutHandler = useCallback(() => {
     setToken(null);
+    setDisplayName('');
+    setPhotoURL('');
     localStorage.removeItem('token');
     if (logoutTimer) {
       clearTimeout(logoutTimer);
@@ -30,8 +34,12 @@ export const AuthContextProvider = (props) => {
     setLogoutTimer(setTimeout(logoutHandler, 300000)); // 5 minutes in milliseconds
   };
 
+  const updateProfile = useCallback((newProfile) => {
+    setDisplayName(newProfile.displayName);
+    setPhotoURL(newProfile.photoURL);
+  }, []);
+
   useEffect(() => {
-    // Check if there is a token and set a timer for auto-logout
     if (userIsLoggedIn) {
       const remainingTime = localStorage.getItem('expirationTime');
       const remainingTimeInMilliseconds = remainingTime
@@ -49,6 +57,9 @@ export const AuthContextProvider = (props) => {
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
+    updateProfile: updateProfile,
+    displayName: displayName,
+    photoURL: photoURL,
   };
 
   return (

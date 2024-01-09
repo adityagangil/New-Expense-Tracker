@@ -11,13 +11,10 @@ const Home = () => {
       {authCtx.isLoggedIn && !authCtx.isProfileComplete && (
         <div>
           <p>Your profile is incomplete. Please complete it.</p>
-<<<<<<< HEAD
           <Link to="/complete-profile" style={{ textDecoration: 'none', color: 'blue' }}>
             Complete Profile
-          </Link>
-=======
-          <Link to="/complete-profile">Complete Profile</Link>
->>>>>>> 2de0aefc35d4193d01bf742a8f42f397e6249149
+          </Link><br></br>
+          <Link to="/complete-profile">Verify Email</Link>
         </div>
       )}
     </div>

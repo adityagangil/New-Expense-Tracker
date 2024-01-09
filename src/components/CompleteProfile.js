@@ -1,25 +1,20 @@
-// CompleteProfile.js
-<<<<<<< HEAD
+// Inside your CompleteProfile.js component
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './auth-context';
-=======
-import React, { useContext, useState } from 'react';
-import { AuthContext } from './auth-context';
-// import { updateFirebaseUserProfile } from './firebase-utils';
->>>>>>> 2de0aefc35d4193d01bf742a8f42f397e6249149
 import './CompleteProfile.css';
 
 const CompleteProfile = () => {
   const authCtx = useContext(AuthContext);
   const [profileData, setProfileData] = useState({
-<<<<<<< HEAD
     displayName: '',
     photoURL: '',
   });
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   useEffect(() => {
     // Fetch user profile data from Firebase API upon component mount
-    const apiUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I`;
+    const apiUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I
+    `;
 
     const requestBody = {
       idToken: authCtx.token,
@@ -41,6 +36,7 @@ const CompleteProfile = () => {
             displayName: user.displayName || '',
             photoURL: user.photoURL || '',
           });
+          setIsEmailVerified(user.emailVerified);
         }
       })
       .catch((error) => {
@@ -49,16 +45,10 @@ const CompleteProfile = () => {
       });
   }, [authCtx.token]);
 
-=======
-    // Initialize with existing user data if available
-    displayName: authCtx.displayName || '',
-    photoURL: authCtx.photoURL || '',
-  });
-
->>>>>>> 2de0aefc35d4193d01bf742a8f42f397e6249149
   const handleUpdateProfile = () => {
     // Call the Firebase API to update user details
-    const apiUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I`;
+    const apiUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I
+    `;
 
     const requestBody = {
       idToken: authCtx.token,
@@ -81,9 +71,44 @@ const CompleteProfile = () => {
         // Optionally, you can update the local user context with the new data
         authCtx.updateProfile({ displayName: data.displayName, photoURL: data.photoUrl });
         // Redirect or perform additional actions after updating profile
+
+        // After updating profile, check if email is verified
+        setIsEmailVerified(data.emailVerified);
+
+        // If email is not verified, initiate email verification
+        if (!data.emailVerified) {
+          initiateEmailVerification();
+        }
       })
       .catch((error) => {
         console.error('Error updating user details:', error);
+        // Handle error, show message, etc.
+      });
+  };
+
+  const initiateEmailVerification = () => {
+    const apiUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I
+    `;
+
+    const requestBody = {
+      requestType: 'VERIFY_EMAIL',
+      idToken: authCtx.token,
+    };
+
+    fetch(apiUrl, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Verification email sent successfully:', data);
+        // Handle success, show message to the user
+      })
+      .catch((error) => {
+        console.error('Error sending verification email:', error);
         // Handle error, show message, etc.
       });
   };
@@ -112,7 +137,14 @@ const CompleteProfile = () => {
         </div>
         <button type="button" onClick={handleUpdateProfile}>
           Update Profile
-        </button>
+        </button><br></br><br></br>
+
+        {/* Show the "Verify Email" button only if email is not verified */}
+        {!isEmailVerified && (
+          <button type="button" onClick={initiateEmailVerification}>
+            Verify Email
+          </button>
+        )}
       </form>
     </div>
   );

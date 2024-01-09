@@ -1,11 +1,18 @@
 // CompleteProfile.js
+<<<<<<< HEAD
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './auth-context';
+=======
+import React, { useContext, useState } from 'react';
+import { AuthContext } from './auth-context';
+// import { updateFirebaseUserProfile } from './firebase-utils';
+>>>>>>> 2de0aefc35d4193d01bf742a8f42f397e6249149
 import './CompleteProfile.css';
 
 const CompleteProfile = () => {
   const authCtx = useContext(AuthContext);
   const [profileData, setProfileData] = useState({
+<<<<<<< HEAD
     displayName: '',
     photoURL: '',
   });
@@ -42,6 +49,13 @@ const CompleteProfile = () => {
       });
   }, [authCtx.token]);
 
+=======
+    // Initialize with existing user data if available
+    displayName: authCtx.displayName || '',
+    photoURL: authCtx.photoURL || '',
+  });
+
+>>>>>>> 2de0aefc35d4193d01bf742a8f42f397e6249149
   const handleUpdateProfile = () => {
     // Call the Firebase API to update user details
     const apiUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyC75P1CU_dMXKX13MPww9e6DxBin4Z-M4I`;

@@ -1,31 +1,33 @@
-import React, { useContext } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-import AuthForm from './components/AuthForm';
-import Home from './components/home';
-import CompleteProfile from './components/CompleteProfile';
-import { AuthContext, AuthContextProvider } from './components/auth-context';
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout/Layout";
+import UserProfile from "./components/Profile/UserProfile";
+import AuthPage from "./pages/AuthPage";
+import HomePage from "./pages/HomePage";
+import { BrowserRouter as Router } from "react-router-dom";
+import { AuthContextProvider } from "./Store/AuthContext";
+import AuthContext from "./Store/AuthContext";
+import { useContext } from "react";
+import ForgetPassword from "./components/Auth/ForgetPassword";
 
-const ProtectedRoute = ({ element }) => {
+function App() {
   const authCtx = useContext(AuthContext);
 
-  return authCtx.isLoggedIn ? element : <Navigate to="/login" />;
-};
-
-const App = () => {
   return (
     <AuthContextProvider>
       <Router>
-        <Container className="mt-4 text-center">
+        <Layout>
           <Routes>
-            <Route path="/" element={<AuthForm />} />
-            <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
-            <Route path="/complete-profile" element={<ProtectedRoute element={<CompleteProfile />} />} />
+            <Route path="/" element={<HomePage />} />
+            {!authCtx.isLoggedIn && (
+              <Route path="/auth" element={<AuthPage />} />
+            )}
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
           </Routes>
-        </Container>
+        </Layout>
       </Router>
     </AuthContextProvider>
   );
-};
+}
 
 export default App;

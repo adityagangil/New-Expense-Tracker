@@ -1,43 +1,13 @@
-import { createSlice, configureStore } from "@reduxjs/toolkit";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 
-const initialCounterState = { counter: 0, showCounter: true };
+import "./index.css";
+import App from "./App";
+import store from "./store/index.js";
 
-const counterSlice = createSlice({
-    name: "counter",
-    initialState: initialCounterState,
-    reducers: {
-        increment(state, action) {
-            state.counter = state.counter + action.payload;
-        },
-        decrement(state, action) {
-            state.counter = state.counter - action.payload;
-        },
-        toggleCounter(state) {
-            state.showCounter = !state.showCounter;
-        },
-    },
-});
-
-const initialAuthState = { isAuthenticated: false };
-
-const authSlice = createSlice({
-    name: "authentication",
-    initialState: initialAuthState,
-    reducers: {
-        login(state) {
-            state.isAuthenticated = true;
-        },
-        logout(state) {
-            state.isAuthenticated = false;
-        },
-    },
-});
-
-const store = configureStore({
-    reducer: { counter: counterSlice.reducer, auth: authSlice.reducer },
-});
-
-export const counterActions = counterSlice.actions;
-export const authActions = authSlice.actions;
-
-export default store;
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+    <Provider store={store}>
+        <App />
+    </Provider>
+);

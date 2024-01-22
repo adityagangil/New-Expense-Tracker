@@ -1,6 +1,5 @@
 import { useState, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import AuthContext from "../../Store/AuthContext";
 import VerifyEmail from "./VerifyEmail";
 import classes from "./AuthForm.module.css";
